@@ -1,0 +1,17 @@
+{
+  "name": "crapi-worker",
+  "version": "0.0.1",
+  "description": "worker bee",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/*.js"
+  },
+  "keywords": [
+    "stuff"
+  ],
+  "author": "me",
+  "license": "MIT"
+}

@@ -7,6 +7,8 @@ var ksDataTotals = require('ks-data-totals'),
     crypto = require('crypto'),
     fs = require('fs');
 
+var url = 'http://104.131.136.59:8006';
+
 
 // poll real-time data
 router.get('/', function (req, res, next) {
@@ -97,7 +99,7 @@ router.route('/:date/avg')
 
     date = req.params.date;
 
-    request('http://104.131.136.59:8006/poll/' + date, function onResponse (err, response, body) {
+    request(url + date, function onResponse (err, response, body) {
 
       if (err) console.log(err);
 
@@ -109,24 +111,48 @@ router.route('/:date/avg')
 
       var keys, averages = {}, i, j, k;
 
-      // get key names
-      keys = Object.keys(data[0]);
+      try {
+        // get key names
+        keys = Object.keys(data[0]);
 
-      // initialize averages
-      for (k = 0; k < keys.length; k++) averages[keys[k]] = 0;
+        // initialize averages
+        for (k = 0; k < keys.length; k++) averages[keys[k]] = 0;
 
-      // iterate over data points
-      for (i = 0; i < data.length; i++)
-      {
-        // summate values
-        for (j = 0; j < keys.length; j++)
+        // iterate over data points
+        for (i = 0; i < data.length; i++)
         {
-          averages[keys[j]] += data[i][keys[j]];
-          if (i === data.length - 1) averages[keys[j]] = averages[keys[j]] / data.length;
+          // summate values
+          for (j = 0; j < keys.length; j++)
+          {
+            averages[keys[j]] += data[i][keys[j]];
+            if (i === data.length - 1) averages[keys[j]] = averages[keys[j]] / data.length;
+          }
         }
-      }
 
-      res.json(averages);
+        res.json(averages);
+
+      } catch (e) {
+        res.send(e);
+      }
+    });
+
+  });
+
+
+// map to specific statistical end point
+router.route('/:date/avg/:stat')
+
+  .get(function (req, res, next) {
+    var date, stat, data;
+
+    date = req.params.date;
+    stat = req.params.stat;
+
+    request(url +  date + '/avg', function onResponse (err, response, body) {
+
+      if (err) console.log(err);
+
+      res.json(JSON.parse(body)[stat]);
     });
   });
 

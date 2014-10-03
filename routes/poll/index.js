@@ -41,7 +41,7 @@ router.post('/', function (req, res, next) {
 
     entry = { date : date, data : data };
 
-    new models.ksStatsTotals(entry).save();
+    new models.ksDataTotals(entry).save();
 
     res.json(entry);
   });
@@ -53,7 +53,7 @@ router.route('/:date')
   .get(function (req, res, next) {
     var date = req.params.date;
 
-    models.ksStatsTotals
+    models.ksDataTotals
       .find({ 'date' : date })
       .exec(function (err, doc) {
 
@@ -68,7 +68,7 @@ router.route('/:date')
   .put(function (req, res, next) {
     var date = req.params.date;
 
-    models.ksStatsTotals
+    models.ksDataTotals
       .update({ 'date' : date })
       .exec(function (err, doc) {
 

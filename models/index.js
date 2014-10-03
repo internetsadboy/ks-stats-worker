@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  pkgDownloads: require('./ksDataTotals/index')
+  ksDataTotals: require('./ksDataTotals/index')
 };

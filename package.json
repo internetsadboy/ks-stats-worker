@@ -1,17 +1,25 @@
 {
-  "name": "crapi-worker",
+  "name": "ks-stats-worker",
   "version": "0.0.1",
-  "description": "worker bee",
+  "description": "kickstarter statistics worker",
   "main": "app.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node test/*.js"
+    "test": "node test/*.js",
+    "start": "node app.js"
   },
   "keywords": [
-    "stuff"
+    "kickstarter statistics worker"
   ],
-  "author": "me",
-  "license": "MIT"
+  "author": "gns",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.9.0",
+    "express": "^4.9.5",
+    "ks-data-totals": "0.0.2",
+    "method-override": "^2.2.0",
+    "mongoose": "^3.8.17"
+  }
 }

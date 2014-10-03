@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 
 
-var Schema, ObjectId, pkgDownloadsSchema;
+var Schema, ObjectId, ksDataTotalsSchema;
 
 Schema = mongoose.Schema;
 ObjectId = Schema.ObjectId;

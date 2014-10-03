@@ -97,7 +97,7 @@ router.route('/:date/avg')
 
     date = req.params.date;
 
-    request('http://104.131.136.59/:8006/poll/' + date, function onResponse (err, response, body) {
+    request('http://104.131.136.59:8006/poll/' + date, function onResponse (err, response, body) {
 
       if (err) console.log(err);
 

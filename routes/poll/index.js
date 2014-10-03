@@ -7,7 +7,7 @@ var ksDataTotals = require('ks-data-totals'),
     crypto = require('crypto'),
     fs = require('fs');
 
-var url = 'http://104.131.136.59:8006';
+var url = 'http://104.131.136.59:8006/poll/';
 
 
 // poll real-time data
@@ -103,15 +103,16 @@ router.route('/:date/avg')
 
       if (err) console.log(err);
 
-      // data transformation
-      data = JSON.parse(body)
-        .map(function onMap (element) {
-          return element.data;
-        });
-
-      var keys, averages = {}, i, j, k;
-
       try {
+
+        // data transformation
+        data = JSON.parse(body)
+          .map(function onMap (element) {
+            return element.data;
+          });
+
+        var keys, averages = {}, i, j, k;
+
         // get key names
         keys = Object.keys(data[0]);
 
@@ -148,7 +149,7 @@ router.route('/:date/avg/:stat')
     date = req.params.date;
     stat = req.params.stat;
 
-    request(url +  date + '/avg', function onResponse (err, response, body) {
+    request(url + date + '/avg', function onResponse (err, response, body) {
 
       if (err) console.log(err);
 

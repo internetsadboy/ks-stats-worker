@@ -28,17 +28,11 @@ router.post('/', function (req, res, next) {
   month = timestamp.getMonth() + 1; // index starts at 0
   year = timestamp.getFullYear();
 
-  if (month < 10) {
-    month = '0' + month;
-  }
-
-  if (day < 10) {
-    day = '0' + day;
-  }
+  if (month < 10) month = '0' + month;
+  if (day < 10) day = '0' + day;
 
   date = year + '-' + month + '-' + day;
 
-  // create new entry
   ksDataTotals(function (err, data) {
     var entry;
 
@@ -61,9 +55,7 @@ router.route('/:date')
       .find({ 'date' : date })
       .exec(function (err, doc) {
 
-        if (err) {
-          console.log(err);
-        }
+        if (err) console.log(err);
 
         res.json(doc);
       });
@@ -77,9 +69,7 @@ router.route('/:date')
       .update({ 'date' : date })
       .exec(function (err, doc) {
 
-        if (err) {
-          console.log(err);
-        }
+        if (err) console.log(err);
 
         res.send(doc);
       });
@@ -92,9 +82,7 @@ router.route('/:date')
     models.ksDataTotals
       .remove({ 'date' : date }, function (err) {
 
-        if (err) {
-          console.log(err);
-        }
+        if (err) console.log(err);
 
         res.send('');
       });
@@ -109,7 +97,7 @@ router.route('/:date/avg')
 
     date = req.params.date;
 
-    request('http://localhost:8006/poll/' + date, function onResponse (err, response, body) {
+    request('http://104.131.136.59/:8006/poll/' + date, function onResponse (err, response, body) {
 
       if (err) console.log(err);
 
@@ -122,7 +110,7 @@ router.route('/:date/avg')
       var keys, averages = {}, i, j, k;
 
       // get key names
-      keys = Object.keys(data[0])
+      keys = Object.keys(data[0]);
 
       // initialize averages
       for (k = 0; k < keys.length; k++) averages[keys[k]] = 0;

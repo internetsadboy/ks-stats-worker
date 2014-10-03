@@ -3,10 +3,12 @@
 var ksDataTotals = require('ks-data-totals'),
     router = require('express').Router(),
     models = require('../../models/index'),
+    request = require('request'),
     crypto = require('crypto'),
     fs = require('fs');
 
 
+// poll real-time data
 router.get('/', function (req, res, next) {
   ksDataTotals(function (err, data) {
     if (err) res.send('400');
@@ -15,6 +17,7 @@ router.get('/', function (req, res, next) {
 });
 
 
+// create a new entry
 router.post('/', function (req, res, next) {
   var timestamp, day, month, year, date;
 
@@ -50,6 +53,7 @@ router.post('/', function (req, res, next) {
 
 router.route('/:date')
 
+  // get date specific data
   .get(function (req, res, next) {
     var date = req.params.date;
 
@@ -65,6 +69,7 @@ router.route('/:date')
       });
   })
 
+  // update an entry
   .put(function (req, res, next) {
     var date = req.params.date;
 
@@ -80,6 +85,7 @@ router.route('/:date')
       });
   })
 
+  // delete an entry
   .delete(function (req, res, next) {
     var date = req.params.date;
 
@@ -93,6 +99,49 @@ router.route('/:date')
         res.send('');
       });
   });
+
+
+// compute averages
+router.route('/:date/avg')
+
+  .get(function (req, res, next) {
+    var date, data;
+
+    date = req.params.date;
+
+    request('http://localhost:8006/poll/' + date, function onResponse (err, response, body) {
+
+      if (err) console.log(err);
+
+      // data transformation
+      data = JSON.parse(body)
+        .map(function onMap (element) {
+          return element.data;
+        });
+
+      var keys, averages = {}, i, j, k;
+
+      // get key names
+      keys = Object.keys(data[0])
+
+      // initialize averages
+      for (k = 0; k < keys.length; k++) averages[keys[k]] = 0;
+
+      // iterate over data points
+      for (i = 0; i < data.length; i++)
+      {
+        // summate values
+        for (j = 0; j < keys.length; j++)
+        {
+          averages[keys[j]] += data[i][keys[j]];
+          if (i === data.length - 1) averages[keys[j]] = averages[keys[j]] / data.length;
+        }
+      }
+
+      res.json(averages);
+    });
+  });
+
 
 
 module.exports = router;

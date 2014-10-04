@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
          '  * PUT    /poll/:date \n' +
          '  * DELETE /poll/:date \n';
 
-
+  res.setHeader('Content-Type', 'text/plain');
   res.end(docs);
 });
 
